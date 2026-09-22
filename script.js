@@ -1,0 +1,14 @@
+const products=[
+{id:1,name:'Essential Overshirt',category:'Clothing',price:1499,stock:18,symbol:'O',bg:'#d7d4ca'},
+{id:2,name:'Everyday Tote',category:'Accessories',price:899,stock:12,symbol:'T',bg:'#d4ddd2'},
+{id:3,name:'Minimal Sneakers',category:'Clothing',price:2499,stock:9,symbol:'S',bg:'#dedede'},
+{id:4,name:'Studio Cap',category:'Accessories',price:699,stock:20,symbol:'C',bg:'#d8cfc6'},
+{id:5,name:'Ceramic Bottle',category:'Lifestyle',price:799,stock:15,symbol:'B',bg:'#cfd8df'},
+{id:6,name:'Relaxed Tee',category:'Clothing',price:999,stock:10,symbol:'R',bg:'#ddd4df'}];
+let cart=[];const money=n=>n.toLocaleString('en-IN');
+function renderProducts(){const filter=document.querySelector('#category').value;document.querySelector('#products').innerHTML=products.filter(p=>filter==='all'||p.category===filter).map(p=>`<article class="product"><div class="product-img" style="background:${p.bg}">${p.symbol}</div><div class="product-info"><small>${p.category}</small><h3>${p.name}</h3><p>Clean design, premium everyday utility.</p><div class="product-bottom"><strong>₹${money(p.price)}</strong><button onclick="addToCart(${p.id})">Add to cart</button></div></div></article>`).join('')}
+function renderInventory(){document.querySelector('#inventory').innerHTML=products.map(p=>`<tr><td>${p.name}</td><td>${p.category}</td><td>₹${money(p.price)}</td><td>${p.stock}</td></tr>`).join('');document.querySelector('#totalProducts').textContent=products.length;document.querySelector('#totalStock').textContent=products.reduce((a,p)=>a+p.stock,0)}
+function addToCart(id){const p=products.find(x=>x.id===id);cart.push(p);renderCart();openCart()}
+function renderCart(){document.querySelector('#cartCount').textContent=cart.length;document.querySelector('#cartItems').innerHTML=cart.length?cart.map((p,i)=>`<div class="cart-item"><span>${p.name}</span><strong>₹${money(p.price)}</strong></div>`).join(''):'<p class="muted">Your cart is empty.</p>';document.querySelector('#cartTotal').textContent=money(cart.reduce((a,p)=>a+p.price,0))}
+function openCart(){document.querySelector('#cartPanel').classList.add('open');document.querySelector('#overlay').classList.add('show')}function closeCart(){document.querySelector('#cartPanel').classList.remove('open');document.querySelector('#overlay').classList.remove('show')}
+document.querySelector('#category').addEventListener('change',renderProducts);document.querySelector('#cartBtn').addEventListener('click',openCart);document.querySelector('#closeCart').addEventListener('click',closeCart);document.querySelector('#overlay').addEventListener('click',closeCart);document.querySelector('#checkout').addEventListener('click',()=>alert('Demo checkout only. Connect a secure payment gateway for a real store.'));renderProducts();renderInventory();renderCart();
